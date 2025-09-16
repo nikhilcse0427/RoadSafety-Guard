@@ -1,0 +1,55 @@
+# Node
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+server/package-lock.json
+client/package-lock.json
+
+# Env
+.env
+.env.*
+server/.env
+client/.env
+
+# Build outputs
+build/
+dist/
+server/dist/
+client/build/
+client/.next/
+
+# Coverage
+coverage/
+**/coverage/
+
+# Logs
+logs/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Cache
+.cache/
+.eslintcache
+.stylelintcache
+.next/
+.vercel/
+
+# Misc
+*.local
+*.env.local
+**/.turbo
+**/.parcel-cache
+**/.vite
