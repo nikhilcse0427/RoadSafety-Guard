@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const AccidentReport = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     title: '',
     location: '',
@@ -99,7 +100,7 @@ const AccidentReport = () => {
       return;
     }
     try {
-      await axios.post('/api/accidents', {
+      await axios.post(`${API_URL}/api/accidents`, {
         ...formData,
         coordinates: { latitude: lat, longitude: lng },
       });

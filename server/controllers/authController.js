@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
-const User = require('../models/User');
+import jwt from 'jsonwebtoken';
+import { validationResult } from 'express-validator';
+import User from '../models/User.js';
 
 const generateToken = (userId) =>
   jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '7d' });
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {``
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -65,8 +65,7 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server error during login' });
   }
 };
-
-exports.me = async (req, res) => {
+const me = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-password');
     res.json(user);
@@ -76,7 +75,7 @@ exports.me = async (req, res) => {
   }
 };
 
-exports.updateProfile = async (req, res) => {
+const updateProfile = async (req, res) => {
   try {
     const { firstName, lastName, phone, department } = req.body;
     const user = await User.findByIdAndUpdate(
@@ -91,7 +90,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-exports.deleteAccount = async (req, res) => {
+const deleteAccount = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -101,5 +100,6 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ message: 'Server error deleting account' });
   }
 };
+export default { register, login, me, updateProfile, deleteAccount };
 
 

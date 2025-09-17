@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const accidentSchema = new mongoose.Schema({
   title: {
@@ -104,4 +104,5 @@ accidentSchema.index({ coordinates: '2dsphere' });
 accidentSchema.index({ dateTime: -1 });
 accidentSchema.index({ severity: 1 });
 
-module.exports = mongoose.model('Accident', accidentSchema);
+const Accident = mongoose.model('Accident', accidentSchema);
+export default Accident;

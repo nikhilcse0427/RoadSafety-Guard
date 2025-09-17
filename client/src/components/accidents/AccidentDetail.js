@@ -6,6 +6,7 @@ const AccidentDetail = () => {
   const { id } = useParams();
   const [accident, setAccident] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     fetchAccidentDetail();
@@ -13,7 +14,7 @@ const AccidentDetail = () => {
 
   const fetchAccidentDetail = async () => {
     try {
-      const response = await axios.get(`/api/accidents/${id}`);
+      const response = await axios.get(`${API_URL}/api/accidents/${id}`);
       setAccident(response.data);
     } catch (error) {
       console.error('Error fetching accident detail:', error);

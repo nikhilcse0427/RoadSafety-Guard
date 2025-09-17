@@ -1,7 +1,7 @@
-const express = require('express');
-const { body } = require('express-validator');
-const auth = require('../middleware/auth');
-const accidentController = require('../controllers/accidentController');
+import express from 'express';
+import { body } from 'express-validator';
+import auth from '../middleware/auth.js';
+import accidentController from '../controllers/accidentController.js';
 
 const router = express.Router();
 
@@ -42,4 +42,4 @@ router.put('/:id', auth, accidentController.updateAccident);
 // @access  Private (Admin only)
 router.delete('/:id', auth, accidentController.deleteAccident);
 
-module.exports = router;
+export default router;

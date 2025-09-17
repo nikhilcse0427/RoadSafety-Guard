@@ -1,26 +1,38 @@
-const express = require('express');
-const { body } = require('express-validator');
-const auth = require('../middleware/auth');
-const authController = require('../controllers/authController');
+import express from 'express';
+import { body } from 'express-validator';
+import auth from '../middleware/auth.js';
+import authController from '../controllers/authController.js';
 
-const router = express.Router();
+const router = express.Router(); // ✅ Correct router instance
 
 // @route   POST /api/auth/register
 // @desc    Register a new user
 // @access  Public
-router.post('/register', [
-  body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long').matches(/^[a-zA-Z0-9_]+$/).withMessage('Username can only contain letters, numbers, and underscores'),
-  body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-], authController.register);
+router.post(
+  '/register',
+  [
+    body('username')
+      .isLength({ min: 3 })
+      .withMessage('Username must be at least 3 characters long')
+      .matches(/^[a-zA-Z0-9_]+$/)
+      .withMessage('Username can only contain letters, numbers, and underscores'),
+    body('email').isEmail().withMessage('Please provide a valid email'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  ],
+  authController.register
+);
 
 // @route   POST /api/auth/login
 // @desc    Login user
 // @access  Public
-router.post('/login', [
-  body('username').notEmpty().withMessage('Username is required'),
-  body('password').notEmpty().withMessage('Password is required')
-], authController.login);
+router.post(
+  '/login',
+  [
+    body('username').notEmpty().withMessage('Username is required'),
+    body('password').notEmpty().withMessage('Password is required'),
+  ],
+  authController.login
+);
 
 // @route   GET /api/auth/me
 // @desc    Get current user
@@ -37,4 +49,4 @@ router.put('/profile', auth, authController.updateProfile);
 // @access  Private
 router.delete('/delete', auth, authController.deleteAccount);
 
-module.exports = router;
+export default router;

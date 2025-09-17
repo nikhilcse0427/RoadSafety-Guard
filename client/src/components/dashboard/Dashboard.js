@@ -27,13 +27,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchDashboardData = async () => {
     try {
       const params = {};
       if (startDate) params.startDate = startDate;
       if (endDate) params.endDate = endDate;
-      const response = await axios.get('/api/analytics/dashboard', { params });
+      const response = await axios.get(`${API_URL}/api/analytics/dashboard`, { params });
       setDashboardData(response.data);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);

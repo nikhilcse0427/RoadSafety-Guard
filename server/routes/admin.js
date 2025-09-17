@@ -1,7 +1,7 @@
-const express = require('express')
-const { body } = require('express-validator')
-const auth = require('../middleware/auth');
-const adminController = require('../controllers/adminController');
+import express from 'express'
+import { body } from 'express-validator'
+import auth from '../middleware/auth.js';
+import adminController from '../controllers/adminController.js';
 
 const router = express.Router();
 
@@ -35,4 +35,4 @@ router.get('/users', auth, adminController.requireAdmin, adminController.getUser
 // @access  Private (Admin only)
 router.put('/users/:id/role', auth, adminController.requireAdmin, [body('role').isIn(['user', 'admin', 'officer']).withMessage('Invalid role')], adminController.updateUserRole);
 
-module.exports = router;
+export default router;

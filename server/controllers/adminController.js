@@ -1,13 +1,13 @@
-const { validationResult } = require('express-validator');
-const Accident = require('../models/Accident');
-const User = require('../models/User');
+import { validationResult } from 'express-validator';
+import Accident from '../models/Accident.js';
+import User from '../models/User.js';
 
-exports.requireAdmin = (req, res, next) => {
+const requireAdmin = (req, res, next) => {
   if (req.user.role !== 'admin') return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
   next();
 };
 
-exports.getDashboard = async (req, res) => {
+const getDashboard = async (req, res) => {
   try {
     const [ totalAccidents, pendingVerification, verifiedAccidents, totalUsers, recentAccidents, emergencyAccidents ] = await Promise.all([
       Accident.countDocuments(),
@@ -25,7 +25,7 @@ exports.getDashboard = async (req, res) => {
   }
 };
 
-exports.getPendingAccidents = async (req, res) => {
+const getPendingAccidents = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const accidents = await Accident.find({ isVerified: false })
@@ -41,7 +41,7 @@ exports.getPendingAccidents = async (req, res) => {
   }
 };
 
-exports.verifyAccident = async (req, res) => {
+const verifyAccident = async (req, res) => {
   try {
     const accident = await Accident.findById(req.params.id);
     if (!accident) return res.status(404).json({ message: 'Accident report not found' });
@@ -57,7 +57,7 @@ exports.verifyAccident = async (req, res) => {
   }
 };
 
-exports.rejectAccident = async (req, res) => {
+const rejectAccident = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -75,7 +75,7 @@ exports.rejectAccident = async (req, res) => {
   }
 };
 
-exports.getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
     const { page = 1, limit = 10, role } = req.query;
     const query = role ? { role } : {};
@@ -88,7 +88,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.updateUserRole = async (req, res) => {
+const updateUserRole = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -102,3 +102,4 @@ exports.updateUserRole = async (req, res) => {
 };
 
 
+export default { requireAdmin, getDashboard, getPendingAccidents, verifyAccident, rejectAccident, getUsers, updateUserRole };

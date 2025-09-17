@@ -3,6 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('/api/auth/me');
+          const response = await axios.get(`${API_URL}/api/auth/me`);
           setUser(response.data);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -71,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post('/api/auth/login', {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         username,
         password,
       });
@@ -93,7 +94,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post('/api/auth/register', userData);
+      const response = await axios.post(`${API_URL}/api/auth/register`, userData);
 
       const { token, user: newUser } = response.data;
 
@@ -119,7 +120,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (profileData) => {
     try {
-      const response = await axios.put('/api/auth/profile', profileData);
+      const response = await axios.put(`${API_URL}/api/auth/profile`, profileData);
       setUser(response.data.user);
       toast.success('Profile updated successfully');
       return { success: true };
@@ -132,7 +133,7 @@ export const AuthProvider = ({ children }) => {
 
   const deleteAccount = async () => {
     try {
-      await axios.delete('/api/auth/delete');
+      await axios.delete(`${API_URL}/api/auth/delete`);
       logout();
       toast.success('Account deleted successfully');
       return { success: true };

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Road Safety Guard - A comprehensive road safety management application",
   "main": "index.js",
+  "type": "module",
   "scripts": {
   "dev": "concurrently \"npm run server\" \"npm run client\"",
   "server": "cd server && npm run dev",

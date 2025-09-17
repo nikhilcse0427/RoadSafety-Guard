@@ -1,17 +1,23 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+
+// Route imports
+import authRoutes from "./routes/auth.js";
+import accidentRoutes from "./routes/accidents.js";
+import analyticsRoutes from "./routes/analytics.js";
+import adminRoutes from "./routes/admin.js";
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 
-// CORS configuration (supports comma-separated origins in CORS_ORIGIN)
+// CORS configuration
 const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map(s => s.trim())
-  : undefined; // undefined => reflect request origin (development)
+  ? process.env.CORS_ORIGIN.split(",").map(s => s.trim())
+  : undefined;
 
 const corsOptions = {
   origin: allowedOrigins || true,
@@ -23,21 +29,20 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/accidents', require('./routes/accidents'));
-app.use('/api/analytics', require('./routes/analytics'));
-app.use('/api/admin', require('./routes/admin'));
+app.use("/api/auth", authRoutes);
+app.use("/api/accidents", accidentRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
 connectDB();
 
 // Basic route
-app.get('/', (req, res) => {
-  res.json({ message: 'Road Safety Guard API is running!' });
+app.get("/", (req, res) => {
+  res.json({ message: "Road Safety Guard API is running!" });
 });
 
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

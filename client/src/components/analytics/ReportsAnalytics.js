@@ -19,6 +19,7 @@ const ReportsAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('month');
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const downloadCSV = (rows, filename) => {
     if (!rows || rows.length === 0) return;
@@ -39,7 +40,7 @@ const ReportsAnalytics = () => {
 
   const fetchAnalyticsData = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/analytics/dashboard?period=${timeRange}`);
+      const response = await axios.get(`${API_URL}/api/analytics/dashboard?period=${timeRange}`);
       setAnalyticsData(response.data);
     } catch (error) {
       console.error('Error fetching analytics data:', error);

@@ -1,7 +1,7 @@
-const { validationResult } = require('express-validator');
-const Accident = require('../models/Accident');
+import { validationResult } from 'express-validator';
+import Accident from '../models/Accident.js';
 
-exports.createAccident = async (req, res) => {
+const createAccident = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -17,7 +17,7 @@ exports.createAccident = async (req, res) => {
   }
 };
 
-exports.getAccidents = async (req, res) => {
+const getAccidents = async (req, res) => {
   try {
     const { page = 1, limit = 10, severity, category, status, startDate, endDate, location } = req.query;
     const query = {};
@@ -45,7 +45,7 @@ exports.getAccidents = async (req, res) => {
   }
 };
 
-exports.getRecentAccidents = async (req, res) => {
+const getRecentAccidents = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 5;
     const accidents = await Accident.find()
@@ -59,7 +59,7 @@ exports.getRecentAccidents = async (req, res) => {
   }
 };
 
-exports.getAccidentById = async (req, res) => {
+const getAccidentById = async (req, res) => {
   try {
     const accident = await Accident.findById(req.params.id).populate('reportedBy', 'username email profile');
     if (!accident) return res.status(404).json({ message: 'Accident report not found' });
@@ -70,7 +70,7 @@ exports.getAccidentById = async (req, res) => {
   }
 };
 
-exports.updateAccident = async (req, res) => {
+const updateAccident = async (req, res) => {
   try {
     const accident = await Accident.findById(req.params.id);
     if (!accident) return res.status(404).json({ message: 'Accident report not found' });
@@ -89,7 +89,7 @@ exports.updateAccident = async (req, res) => {
   }
 };
 
-exports.deleteAccident = async (req, res) => {
+const deleteAccident = async (req, res) => {
   try {
     if (req.user.role !== 'admin') return res.status(403).json({ message: 'Not authorized to delete reports' });
     const accident = await Accident.findById(req.params.id);
@@ -102,4 +102,4 @@ exports.deleteAccident = async (req, res) => {
   }
 };
 
-
+export default { createAccident, getAccidents, getRecentAccidents, getAccidentById, updateAccident, deleteAccident };

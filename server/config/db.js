@@ -1,19 +1,24 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: '../.env'
+}); // looks for .env in root
 
 const connectDB = async () => {
-  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/road-safety-guard';
   try {
-    await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    if (!process.env.DATABASE_URI) {
+      throw new Error("DATABASE_URI not defined in .env");
+    }
+
+    const connection = await mongoose.connect(process.env.DATABASE_URI, {
     });
-    console.log('MongoDB connected successfully');
+
+    console.log('MongoDB connected successfully!!');
   } catch (err) {
     console.error('MongoDB connection error:', err);
-    process.exit(1);
+    process.exit(1); // exit process with failure
   }
 };
 
-module.exports = connectDB;
-
-
+export default connectDB;

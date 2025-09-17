@@ -10,12 +10,12 @@ const AdminPanel = () => {
   useEffect(() => {
     fetchAdminData();
   }, []);
-
+  const API_URL = process.env.REACT_APP_API_URL;
   const fetchAdminData = async () => {
     try {
       const [dashboardResponse, pendingResponse] = await Promise.all([
-        axios.get('/api/admin/dashboard'),
-        axios.get('/api/admin/accidents/pending')
+        axios.get(`${API_URL}/api/admin/dashboard`),
+        axios.get(`${API_URL}/api/admin/accidents/pending`)
       ]);
       
       setDashboardData(dashboardResponse.data);
@@ -29,7 +29,7 @@ const AdminPanel = () => {
 
   const handleVerify = async (accidentId) => {
     try {
-      await axios.put(`/api/admin/accidents/${accidentId}/verify`);
+      await axios.put(`${API_URL}/api/admin/accidents/${accidentId}/verify`);
       fetchAdminData(); // Refresh data
     } catch (error) {
       console.error('Error verifying accident:', error);
@@ -38,7 +38,7 @@ const AdminPanel = () => {
 
   const handleReject = async (accidentId, reason) => {
     try {
-      await axios.put(`/api/admin/accidents/${accidentId}/reject`, { reason });
+      await axios.put(`${API_URL}/api/admin/accidents/${accidentId}/reject`, { reason });
       fetchAdminData(); // Refresh data
     } catch (error) {
       console.error('Error rejecting accident:', error);

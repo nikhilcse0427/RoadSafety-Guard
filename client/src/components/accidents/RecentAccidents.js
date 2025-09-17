@@ -10,6 +10,7 @@ const RecentAccidents = () => {
     category: '',
     status: '',
   });
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchAccidents = useCallback(async () => {
     try {
@@ -18,7 +19,7 @@ const RecentAccidents = () => {
         if (value) params.append(key, value);
       });
 
-      const response = await axios.get(`/api/accidents?${params}`);
+      const response = await axios.get(`${API_URL}/api/accidents?${params}`);
       setAccidents(response.data.accidents);
     } catch (error) {
       console.error('Error fetching accidents:', error);

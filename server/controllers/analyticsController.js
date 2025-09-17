@@ -1,6 +1,6 @@
-const Accident = require('../models/Accident');
+import Accident from '../models/Accident.js';
 
-exports.getDashboard = async (req, res) => {
+const getDashboard = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     const dateFilter = {};
@@ -71,7 +71,7 @@ exports.getDashboard = async (req, res) => {
   }
 };
 
-exports.getTrends = async (req, res) => {
+const getTrends = async (req, res) => {
   try {
     const { period = 'month', startDate, endDate } = req.query;
     const dateFilter = {};
@@ -106,7 +106,7 @@ exports.getTrends = async (req, res) => {
   }
 };
 
-exports.getHeatmap = async (req, res) => {
+const getHeatmap = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     const dateFilter = {};
@@ -124,3 +124,4 @@ exports.getHeatmap = async (req, res) => {
 };
 
 
+export default { getDashboard, getTrends, getHeatmap };
