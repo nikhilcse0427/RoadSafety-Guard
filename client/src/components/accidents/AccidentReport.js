@@ -100,7 +100,7 @@ const AccidentReport = () => {
       return;
     }
     try {
-      await axios.post(`${API_URL}/api/accidents`, {
+      await axios.post(`${API_URL}/accidents`, {
         ...formData,
         coordinates: { latitude: lat, longitude: lng },
       });

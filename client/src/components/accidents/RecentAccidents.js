@@ -230,7 +230,7 @@ const RecentAccidents = () => {
                     {accident.reportedBy?.username || 'Unknown'}
                   </p>
                   <Link
-                    to={`/accidents/${accident._id}`}
+                    to={`${API_URL}/accidents/${accident._id}`}
                     className="inline-block mt-2 text-primary-400 hover:text-primary-300 text-xs font-medium"
                   >
                     View Details →

@@ -17,8 +17,10 @@ import axios from 'axios';
 import NotFound from './components/misc/NotFound';
 import LandingPage from './components/layout/LandingPage';
 
+
 // Configure Axios base URL for production deployments (e.g., Vercel)
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL || '';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {

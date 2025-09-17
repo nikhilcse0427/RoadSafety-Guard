@@ -40,7 +40,7 @@ const ReportsAnalytics = () => {
 
   const fetchAnalyticsData = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/analytics/dashboard?period=${timeRange}`);
+      const response = await axios.get(`${API_URL}/analytics/dashboard?period=${timeRange}`);
       setAnalyticsData(response.data);
     } catch (error) {
       console.error('Error fetching analytics data:', error);

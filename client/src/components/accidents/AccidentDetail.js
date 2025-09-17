@@ -14,7 +14,7 @@ const AccidentDetail = () => {
 
   const fetchAccidentDetail = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/accidents/${id}`);
+      const response = await axios.get(`${API_URL}/accidents/${id}`);
       setAccident(response.data);
     } catch (error) {
       console.error('Error fetching accident detail:', error);

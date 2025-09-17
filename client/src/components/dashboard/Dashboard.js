@@ -34,7 +34,7 @@ const Dashboard = () => {
       const params = {};
       if (startDate) params.startDate = startDate;
       if (endDate) params.endDate = endDate;
-      const response = await axios.get(`${API_URL}/api/analytics/dashboard`, { params });
+      const response = await axios.get(`${API_URL}/analytics/dashboard`, { params });
       setDashboardData(response.data);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
