@@ -18,8 +18,13 @@ import NotFound from './components/misc/NotFound';
 import LandingPage from './components/layout/LandingPage';
 
 
-// Configure Axios base URL for production deployments (e.g., Vercel)
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+// Configure Axios base URL with robust fallback
+const ENV_API_URL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = (
+  ENV_API_URL ||
+  (typeof window !== 'undefined' && window.__API_URL__) ||
+  (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api')
+);
 
 
 // Protected Route Component

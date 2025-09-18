@@ -5,19 +5,25 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-  "dev": "concurrently \"npm run server\" \"npm run client\"",
-  "server": "cd server && npm run dev",
-  "client": "cd client && npm start",
-
-  "build": "cd client && npm run build", 
-  "start": "cd server && npm start",     
-
-  "install-all": "npm install && cd server && npm install && cd ../client && npm install"
-},
-  "keywords": ["road-safety", "accident-reporting", "dashboard", "mern"],
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [
+    "road-safety",
+    "accident-reporting",
+    "dashboard",
+    "mern"
+  ],
   "author": "Road Safety Guard Team",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
   }
 }

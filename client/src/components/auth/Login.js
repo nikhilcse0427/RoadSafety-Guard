@@ -93,6 +93,7 @@ const Login = () => {
                   value={formData.username}
                   onChange={handleChange}
                   className="input-field pl-10"
+                  autoComplete="username"
                   required
                 />
               </div>
@@ -123,6 +124,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="input-field pl-10"
+                  autoComplete="current-password"
                   required
                 />
               </div>

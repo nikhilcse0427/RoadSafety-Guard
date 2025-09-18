@@ -162,6 +162,7 @@ const Signup = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="input-field pl-10"
+                  autoComplete="new-password"
                   required
                 />
               </div>
@@ -192,6 +193,7 @@ const Signup = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="input-field pl-10"
+                  autoComplete="new-password"
                   required
                 />
               </div>
