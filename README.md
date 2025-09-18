@@ -17,13 +17,6 @@ Road Safety Guard is a modern MERN application to report, analyze, and prevent r
 ## Screenshots
 Add your screenshots to `docs/screenshots/` and update the paths below.
 
-| Screen | Preview |
-|---|---|
-| Landing / Dashboard | ![Dashboard](docs/screenshots/dashboard.png) |
-| Report Accident | ![Report](docs/screenshots/report.png) |
-| Recent Accidents | ![Recent Accidents](docs/screenshots/recent.png) |
-| Admin Panel | ![Admin](docs/screenshots/admin.png) |
-
 ## Features
 - Authentication: signup/login (JWT), profile
 - Accident Reporting: severity, category, casualties, vehicles, weather, coordinates
