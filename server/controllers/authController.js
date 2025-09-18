@@ -5,7 +5,7 @@ import User from '../models/User.js';
 const generateToken = (userId) =>
   jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '7d' });
 
-const register = async (req, res) => {``
+const register = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

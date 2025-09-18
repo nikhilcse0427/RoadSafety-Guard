@@ -10,7 +10,12 @@ const RecentAccidents = () => {
     category: '',
     status: '',
   });
-  const API_URL = process.env.REACT_APP_API_URL;
+  const ENV_API_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = (
+    ENV_API_URL ||
+    (typeof window !== 'undefined' && window.__API_URL__) ||
+    (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api')
+  );
 
   const fetchAccidents = useCallback(async () => {
     try {
@@ -19,14 +24,14 @@ const RecentAccidents = () => {
         if (value) params.append(key, value);
       });
 
-      const response = await axios.get(`${API_URL}/api/accidents?${params}`);
+      const response = await axios.get(`${API_BASE_URL}/accidents?${params}`);
       setAccidents(response.data.accidents);
     } catch (error) {
       console.error('Error fetching accidents:', error);
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, API_BASE_URL]);
 
   useEffect(() => {
     fetchAccidents();
@@ -230,7 +235,7 @@ const RecentAccidents = () => {
                     {accident.reportedBy?.username || 'Unknown'}
                   </p>
                   <Link
-                    to={`${API_URL}/accidents/${accident._id}`}
+                    to={`/accidents/${accident._id}`}
                     className="inline-block mt-2 text-primary-400 hover:text-primary-300 text-xs font-medium"
                   >
                     View Details →

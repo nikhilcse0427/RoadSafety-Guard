@@ -12,7 +12,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL;
+  // No API base URL needed in this component for navigation
 
   const handleChange = (e) => {
     setFormData({
@@ -35,7 +35,7 @@ const Signup = () => {
     const result = await register(userData);
 
     if (result.success) {
-      navigate(`${API_URL}/dashboard`);
+      navigate(`/dashboard`);
     }
 
     setLoading(false);
@@ -218,7 +218,7 @@ const Signup = () => {
             <div className="text-center">
               <span className="text-dark-400">Already have an account? </span>
               <Link
-                to={`${API_URL}/login`}
+                to={`/login`}
                 className="text-primary-400 hover:text-primary-300 font-semibold transition-colors duration-200"
               >
                 Login

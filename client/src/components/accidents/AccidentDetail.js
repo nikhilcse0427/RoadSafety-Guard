@@ -6,7 +6,12 @@ const AccidentDetail = () => {
   const { id } = useParams();
   const [accident, setAccident] = useState(null);
   const [loading, setLoading] = useState(true);
-  const API_URL = process.env.REACT_APP_API_URL;
+  const ENV_API_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = (
+    ENV_API_URL ||
+    (typeof window !== 'undefined' && window.__API_URL__) ||
+    (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api')
+  );
 
   useEffect(() => {
     fetchAccidentDetail();
@@ -14,7 +19,7 @@ const AccidentDetail = () => {
 
   const fetchAccidentDetail = async () => {
     try {
-      const response = await axios.get(`${API_URL}/accidents/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/accidents/${id}`);
       setAccident(response.data);
     } catch (error) {
       console.error('Error fetching accident detail:', error);
@@ -104,25 +109,25 @@ const AccidentDetail = () => {
                 <label className="text-sm font-medium text-dark-400">Description</label>
                 <p className="text-white mt-1">{accident.description}</p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-dark-400">Location</label>
                   <p className="text-white mt-1">{accident.location}</p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-dark-400">Date & Time</label>
                   <p className="text-white mt-1">
                     {new Date(accident.dateTime).toLocaleString()}
                   </p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-dark-400">Category</label>
                   <p className="text-white mt-1">{accident.category}</p>
                 </div>
-                
+
                 <div>
                   <label className="text-sm font-medium text-dark-400">Status</label>
                   <p className="text-white mt-1">{accident.status}</p>
@@ -147,7 +152,7 @@ const AccidentDetail = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="bg-yellow-900 border border-yellow-700 rounded-lg p-4">
                   <div className="flex items-center">
                     <svg className="w-6 h-6 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

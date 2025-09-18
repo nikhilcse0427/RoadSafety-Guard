@@ -17,7 +17,11 @@ const app = express();
 // Allowed origins for CORS
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map(s => s.trim())
-  : ["http://localhost:3000", "https://road-safety-guard-rcxx.vercel.app"];
+  : [
+    "http://localhost:3000",
+    "https://road-safety-guard-rcxx.vercel.app",
+    process.env.FRONTEND_URL
+  ].filter(Boolean);
   
 
 // CORS configuration

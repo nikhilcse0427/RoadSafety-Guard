@@ -1,17 +1,21 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-dotenv.config({
-  path: '../.env'
-}); // looks for .env in root
+// Load env from server/.env or root .env depending on deploy
+dotenv.config();
 
 const connectDB = async () => {
   try {
-    if (!process.env.DATABASE_URI) {
-      throw new Error("DATABASE_URI not defined in .env");
+    const mongoUri = process.env.MONGODB_URI || process.env.DATABASE_URI;
+    if (!mongoUri) {
+      throw new Error("MONGODB_URI not defined in environment");
     }
 
-    const connection = await mongoose.connect(process.env.DATABASE_URI, {
+    await mongoose.connect(mongoUri, {
+      // Recommended options for modern Mongoose
+      // keepAlive helps on serverless providers
+      keepAlive: true,
+      connectTimeoutMS: 20000,
     });
 
     console.log('MongoDB connected successfully!!');
