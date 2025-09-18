@@ -14,22 +14,28 @@ dotenv.config();
 
 const app = express();
 
-// CORS configuration
+// Allowed origins for CORS
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map(s => s.trim())
-  : undefined;
+  : ["http://localhost:3000", "https://road-safety-guard-rcxx.vercel.app"];
+  
 
-const corsOptions = {
-  origin: allowedOrigins || true,
-  credentials: true,
-};
-
-// Middleware
+// CORS configuration
 app.use(cors({
-  origin: ["https://road-safety-guard-rcxx.vercel.app/"], // frontend domain
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+    if (!allowedOrigins.includes(origin)) {
+      const msg = `CORS policy: Access denied from origin ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
 }));
+
+// Middleware to parse JSON
 app.use(express.json());
 
 // Routes
@@ -41,7 +47,7 @@ app.use("/api/admin", adminRoutes);
 // MongoDB connection
 connectDB();
 
-// Basic route
+// Basic test route
 app.get("/", (req, res) => {
   res.json({ message: "Road Safety Guard API is running!" });
 });
