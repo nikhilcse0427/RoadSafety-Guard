@@ -1,16 +1,14 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import User from './models/User.js';
+import Accident from './models/Accident.js';
 
-// Load environment variables
-dotenv.config()
+// Load environment variables from server/.env
+dotenv.config({ path: new URL('./.env', import.meta.url).pathname });
 
-// Import models
-const User = require('./models/User');
-const Accident = require('./models/Accident');
-
-// MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/road-safety-guard';
+// MongoDB connection — align with app default DB name
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/road_safety_guard';
 
 // Dummy users data
 const dummyUsers = [
@@ -535,7 +533,7 @@ async function seedDatabase() {
     // Create accidents with random users as reporters
     for (let i = 0; i < dummyAccidents.length; i++) {
       const accidentData = { ...dummyAccidents[i] };
-      
+
       // Assign random user as reporter (prefer regular users)
       const regularUsers = createdUsers.filter(user => user.role === 'user');
       const randomUser = regularUsers[Math.floor(Math.random() * regularUsers.length)];
@@ -556,13 +554,13 @@ async function seedDatabase() {
 
     console.log('\n✅ Database seeded successfully!');
     console.log(`Created ${createdUsers.length} users and ${dummyAccidents.length} accidents`);
-    
+
     // Display summary
     console.log('\n📊 Summary:');
     console.log(`- Admin users: ${createdUsers.filter(u => u.role === 'admin').length}`);
     console.log(`- Officer users: ${createdUsers.filter(u => u.role === 'officer').length}`);
     console.log(`- Regular users: ${createdUsers.filter(u => u.role === 'user').length}`);
-    
+
     const accidents = await Accident.find();
     console.log(`- Total accidents: ${accidents.length}`);
     console.log(`- Verified accidents: ${accidents.filter(a => a.isVerified).length}`);
