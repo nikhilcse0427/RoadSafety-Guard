@@ -9,7 +9,6 @@
   "projects": {
     "c:\\Users\\Hp\\Desktop\\a": {
       "allowedTools": [],
-      "history": [],
       "mcpContextUris": [],
       "mcpServers": {},
       "enabledMcpjsonServers": [],
@@ -21,6 +20,17 @@
     },
     "C:\\Users\\Hp\\Desktop\\a": {
       "allowedTools": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false
+    },
+    "C:\\Users\\Hp": {
+      "allowedTools": [],
       "history": [],
       "mcpContextUris": [],
       "mcpServers": {},
@@ -31,5 +41,13 @@
       "hasClaudeMdExternalIncludesApproved": false,
       "hasClaudeMdExternalIncludesWarningShown": false
     }
+  },
+  "opusProMigrationComplete": true,
+  "sonnet1m45MigrationComplete": true,
+  "cachedChromeExtensionInstalled": false,
+  "changelogLastFetched": 1771611491686,
+  "clientDataCache": {
+    "data": null,
+    "timestamp": 1772795139003
   }
 }
