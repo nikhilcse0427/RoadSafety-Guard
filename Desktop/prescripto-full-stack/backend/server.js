@@ -16,7 +16,12 @@ connectCloudinary()
 // middlewares
 app.use(express.json())
 app.use(cors({
-  origin: "*",
+  origin: [
+    "https://doctor-appointment-app-mern-stack-g.vercel.app",
+    "https://doctor-appointment-app-mern-stack-5.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173"
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'token'],
