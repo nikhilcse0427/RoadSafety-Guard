@@ -1,14 +1,16 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import dotenv from 'dotenv';
-import User from './models/User.js';
-import Accident from './models/Accident.js';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
 
-// Load environment variables from server/.env
-dotenv.config({ path: new URL('./.env', import.meta.url).pathname });
+// Load environment variables
+dotenv.config();
 
-// MongoDB connection — align with app default DB name
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/road_safety_guard';
+// Import models
+const User = require('./models/User');
+const Accident = require('./models/Accident');
+
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/road-safety-guard';
 
 // Dummy users data
 const dummyUsers = [
@@ -311,6 +313,164 @@ const dummyAccidents = [
     ]
   },
   {
+    title: 'Weather-Related Multi-Car Pileup',
+    location: 'Interstate 80, Westbound, Pennsylvania',
+    coordinates: {
+      latitude: 40.2732,
+      longitude: -76.8754
+    },
+    dateTime: new Date('2024-01-10T11:00:00Z'),
+    severity: 'Critical',
+    description: 'Heavy snowfall caused multiple vehicles to lose control and collide. Chain reaction involving 8 vehicles.',
+    category: 'Weather conditions',
+    casualties: {
+      fatalities: 2,
+      injuries: 12
+    },
+    vehicles: [
+      { type: 'Car', damage: 'Total' },
+      { type: 'Car', damage: 'Severe' },
+      { type: 'Truck', damage: 'Moderate' },
+      { type: 'Car', damage: 'Severe' },
+      { type: 'Car', damage: 'Moderate' },
+      { type: 'Car', damage: 'Minor' },
+      { type: 'Car', damage: 'Moderate' },
+      { type: 'Car', damage: 'Minor' }
+    ],
+    weather: {
+      condition: 'Snowy',
+      visibility: 2
+    },
+    status: 'Closed',
+    isVerified: true,
+    emergencyServices: {
+      police: true,
+      ambulance: true,
+      fire: true
+    },
+    witnesses: [
+      {
+        name: 'Emergency Responder',
+        contact: '+1-555-0206',
+        statement: 'Extreme weather conditions made rescue operations difficult.'
+      }
+    ]
+  },
+  {
+    title: 'Bicycle Accident at Intersection',
+    location: 'Park Avenue & 23rd Street, Midtown',
+    coordinates: {
+      latitude: 40.7406,
+      longitude: -73.9857
+    },
+    dateTime: new Date('2024-01-09T07:45:00Z'),
+    severity: 'Low',
+    description: 'Cyclist was hit by a car making a right turn. Cyclist sustained minor injuries.',
+    category: 'Distracted driving',
+    casualties: {
+      fatalities: 0,
+      injuries: 1
+    },
+    vehicles: [
+      { type: 'Bicycle', damage: 'Moderate' },
+      { type: 'Car', damage: 'Minor' }
+    ],
+    weather: {
+      condition: 'Clear',
+      visibility: 10
+    },
+    status: 'Resolved',
+    isVerified: true,
+    emergencyServices: {
+      police: true,
+      ambulance: false,
+      fire: false
+    },
+    witnesses: [
+      {
+        name: 'Bike Commuter',
+        contact: '+1-555-0207',
+        statement: 'The car turned without checking for cyclists in the bike lane.'
+      }
+    ]
+  },
+  {
+    title: 'Bus Collision with Car',
+    location: 'Main Street & University Avenue, College Town',
+    coordinates: {
+      latitude: 42.3601,
+      longitude: -71.0589
+    },
+    dateTime: new Date('2024-01-08T15:20:00Z'),
+    severity: 'Moderate',
+    description: 'City bus collided with a car that ran a red light. Multiple passengers on bus were shaken but unharmed.',
+    category: 'Distracted driving',
+    casualties: {
+      fatalities: 0,
+      injuries: 2
+    },
+    vehicles: [
+      { type: 'Bus', damage: 'Minor' },
+      { type: 'Car', damage: 'Severe' }
+    ],
+    weather: {
+      condition: 'Clear',
+      visibility: 12
+    },
+    status: 'Under Investigation',
+    isVerified: true,
+    emergencyServices: {
+      police: true,
+      ambulance: true,
+      fire: false
+    },
+    witnesses: [
+      {
+        name: 'Bus Passenger',
+        contact: '+1-555-0208',
+        statement: 'The car definitely ran the red light.'
+      }
+    ]
+  },
+  {
+    title: 'Rush Hour Fender Bender',
+    location: 'Highway 405, Southbound, Los Angeles',
+    coordinates: {
+      latitude: 34.0522,
+      longitude: -118.2437
+    },
+    dateTime: new Date('2024-01-07T17:30:00Z'),
+    severity: 'Low',
+    description: 'Minor collision between two vehicles during heavy rush hour traffic. No injuries reported.',
+    category: 'Distracted driving',
+    casualties: {
+      fatalities: 0,
+      injuries: 0
+    },
+    vehicles: [
+      { type: 'Car', damage: 'Minor' },
+      { type: 'Car', damage: 'Minor' }
+    ],
+    weather: {
+      condition: 'Clear',
+      visibility: 8
+    },
+    status: 'Resolved',
+    isVerified: true,
+    emergencyServices: {
+      police: true,
+      ambulance: false,
+      fire: false
+    },
+    witnesses: [
+      {
+        name: 'Traffic Cam',
+        contact: 'N/A',
+        statement: 'Incident captured on traffic camera footage.'
+      }
+    ]
+  },
+  {
     title: 'Construction Zone Accident',
     location: 'Route 66, Construction Zone, Arizona',
     coordinates: {
@@ -358,16 +518,6 @@ async function seedDatabase() {
     });
     console.log('Connected to MongoDB');
 
-    // Ensure no leftover geospatial indexes conflict with our coordinates shape
-    try {
-      await Accident.collection.dropIndexes();
-      console.log('Dropped existing Accident indexes');
-    } catch (e) {
-      if (e.codeName !== 'NamespaceNotFound' && !/index not found/i.test(e.message)) {
-        console.warn('Warning dropping Accident indexes:', e.message || e);
-      }
-    }
-
     // Clear existing data
     await User.deleteMany({});
     await Accident.deleteMany({});
@@ -385,7 +535,7 @@ async function seedDatabase() {
     // Create accidents with random users as reporters
     for (let i = 0; i < dummyAccidents.length; i++) {
       const accidentData = { ...dummyAccidents[i] };
-
+      
       // Assign random user as reporter (prefer regular users)
       const regularUsers = createdUsers.filter(user => user.role === 'user');
       const randomUser = regularUsers[Math.floor(Math.random() * regularUsers.length)];
@@ -406,13 +556,13 @@ async function seedDatabase() {
 
     console.log('\n✅ Database seeded successfully!');
     console.log(`Created ${createdUsers.length} users and ${dummyAccidents.length} accidents`);
-
+    
     // Display summary
     console.log('\n📊 Summary:');
     console.log(`- Admin users: ${createdUsers.filter(u => u.role === 'admin').length}`);
     console.log(`- Officer users: ${createdUsers.filter(u => u.role === 'officer').length}`);
     console.log(`- Regular users: ${createdUsers.filter(u => u.role === 'user').length}`);
-
+    
     const accidents = await Accident.find();
     console.log(`- Total accidents: ${accidents.length}`);
     console.log(`- Verified accidents: ${accidents.filter(a => a.isVerified).length}`);

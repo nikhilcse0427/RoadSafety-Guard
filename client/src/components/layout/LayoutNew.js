@@ -59,7 +59,7 @@ const LayoutNew = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div className="h-screen bg-dark-900 flex overflow-hidden">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -70,9 +70,9 @@ const LayoutNew = ({ children }) => {
         </div>
       )}
 
-      {/* Fixed Sidebar (100vh) */}
+      {/* Sidebar - Full Height */}
       <div
-        className={`fixed top-0 left-0 z-50 w-64 h-screen bg-dark-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-dark-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static flex flex-col flex-shrink-0 h-full ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
       >
         {/* Logo */}
@@ -82,14 +82,11 @@ const LayoutNew = ({ children }) => {
             <div className="w-4 h-4 bg-orange-500 rounded-full mb-1"></div>
             <div className="w-4 h-4 bg-green-500 rounded-full"></div>
           </div>
-          <div className="leading-tight">
-            <div className="text-lg font-bold text-white">ROAD SAFETY</div>
-            <div className="text-xs font-semibold text-primary-400 tracking-wider">GUARD</div>
-          </div>
+          <h1 className="text-lg font-bold text-white">ROAD SAFETY</h1>
         </div>
 
         {/* Navigation */}
-        <nav className="mt-4 px-2 overflow-y-auto h-[calc(100vh-4rem)]">
+        <nav className="mt-4 px-2">
           <ul className="space-y-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
@@ -112,11 +109,11 @@ const LayoutNew = ({ children }) => {
         </nav>
       </div>
 
-      {/* Main content area (shifted by sidebar width) */}
-      <div className="pl-0 lg:pl-64">
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Top bar */}
-        <div className="sticky top-0 z-30 bg-dark-800/80 backdrop-blur border-b border-dark-700 shadow-md">
-          <div className="h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="bg-dark-800 border-b border-dark-700 px-4 py-3 flex-shrink-0 z-20">
+          <div className="flex items-center justify-between lg:justify-end">
             <button
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden text-dark-400 hover:text-white"
@@ -126,8 +123,7 @@ const LayoutNew = ({ children }) => {
               </svg>
             </button>
 
-            {/* Right-aligned actions including profile */}
-            <div className="ml-auto flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
               <Link
                 to="/report-accident"
                 className="bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200"
@@ -184,9 +180,15 @@ const LayoutNew = ({ children }) => {
           </div>
         </div>
 
-        {/* Page content - only this should scroll */}
-        <main className="min-h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-auto p-4 sm:p-6 lg:p-8">
-          {children}
+        {/* Page content */}
+        <main className="flex-1 p-6 overflow-y-auto relative z-0">
+          {/* Background decoration matching auth pages */}
+          <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-primary-500/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+          <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-red-500/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+
+          <div className="max-w-7xl mx-auto w-full relative z-10">
+            {children}
+          </div>
         </main>
       </div>
     </div>

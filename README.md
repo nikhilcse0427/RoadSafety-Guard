@@ -1,100 +1,237 @@
 # Road Safety Guard
 
-Road Safety Guard is a modern MERN application to report, analyze, and prevent road accidents. It enables citizens to submit structured incident reports and helps authorities with a data‑driven dashboard, trends, and safety resources.
+A comprehensive road safety management application built with the MERN stack (MongoDB, Express.js, React.js, Node.js) and Tailwind CSS. This application helps manage road accidents, provides analytics, and offers safety resources.
 
-## Live Demo
-- App: [`https://road-safety-guard-rcxx.vercel.app/`](https://road-safety-guard-rcxx.vercel.app/)
-
-> Note: The API is self‑hosted. Some features may require a running backend (see Setup).
-
-## Highlights (for Recruiters/Placement)
-- End‑to‑end MERN stack with authentication (JWT) and protected routes
-- Real‑time analytics dashboards with charts and geospatial maps (Leaflet)
-- Admin moderation workflow for verifying accident reports
-- Clean modular architecture: routes, controllers, models, middleware
-- Production‑ready client build and environment‑based configuration
-
-## Screenshots
-Add your screenshots to `docs/screenshots/` and update the paths below.
-
-<<<<<<< HEAD
-
-=======
->>>>>>> aee74377dad099099b474757b3d2d48bbf9d558b
 ## Features
-- Authentication: signup/login (JWT), profile
-- Accident Reporting: severity, category, casualties, vehicles, weather, coordinates
-- Dashboard: stats, trends, category analytics, high‑risk hotspots, interactive map
-- Admin: verify/reject reports
-- Safety Resources: curated tips and emergency contacts
 
-## Tech Stack
-- Frontend: React 18, React Router 6, Tailwind CSS, Recharts, Leaflet
-- Backend: Node.js, Express, MongoDB, Mongoose, JWT, express‑validator
-- Tooling: Nodemon, Concurrently, Axios, dotenv
+### 🔐 Authentication
+- User registration and login
+- Secure JWT-based authentication
+- Profile management
 
-## Getting Started (Local)
-1) Install
+### 📊 Dashboard
+- Real-time accident statistics
+- Recent accidents overview
+- High-risk location heatmap
+- Accident trends and analytics
+- Interactive charts and graphs
+
+### 🚨 Accident Management
+- Comprehensive accident reporting form
+- Accident categorization and severity levels
+- Location tracking and mapping
+- Casualty and vehicle information
+- Weather condition tracking
+- Emergency services notification
+
+### 📈 Analytics & Reports
+- Detailed accident analytics
+- Category-wise distribution
+- Severity analysis
+- Time-based trends
+- High-risk location identification
+
+### 🛡️ Safety Resources
+- Emergency contact information
+- Safety guidelines and tips
+- Accident prevention strategies
+- What-to-do guides
+
+## Technology Stack
+
+### Backend
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM for MongoDB
+- **JWT** - Authentication
+- **bcryptjs** - Password hashing
+- **express-validator** - Input validation
+
+### Frontend
+- **React.js** - UI library
+- **React Router** - Client-side routing
+- **Tailwind CSS** - Styling framework
+- **Recharts** - Data visualization
+- **Axios** - HTTP client
+- **React Hot Toast** - Notifications
+
+## Installation & Setup
+
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB (local or cloud instance)
+- npm or yarn
+
+### 1. Clone the repository
 ```bash
-# from project root
+git clone <repository-url>
+cd road-safety-guard
+```
+
+### 2. Install dependencies
+```bash
+# Install root dependencies
 npm install
-cd server && npm install
-cd ../client && npm install
-```
 
-2) Environment (create `server/.env`)
-```env
-PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/road_safety_guard
-# For hosted DB, use your Atlas URI instead
-# MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>/<db>?retryWrites=true&w=majority
-```
-
-3) Run (concurrently)
-```bash
-# from project root
-npm run dev
-# Frontend: http://localhost:3001 (configured)
-# Backend API: http://localhost:5000
-```
-
-## API Overview (selected)
-- Auth
-  - POST `/api/auth/register`
-  - POST `/api/auth/login`
-  - GET `/api/auth/me`
-- Accidents
-  - POST `/api/accidents`
-  - GET `/api/accidents`
-  - GET `/api/accidents/:id`
-- Analytics
-  - GET `/api/analytics/dashboard`
-  - GET `/api/analytics/trends`
-  - GET `/api/analytics/heatmap`
-
-## Architecture
-- `client/` React SPA
-  - Pages, components, routing, context (`AuthContext`), UI (Tailwind)
-- `server/` Express API
-  - `routes/`, `controllers/`, `models/`, `middleware/`
-  - `config/db.js` for Mongo connection, `server.js` for app boot
-
-## Deployment
-- Frontend is deployed on Vercel: [`road-safety-guard-rcxx.vercel.app`](https://road-safety-guard-rcxx.vercel.app/)
-- Backend can be deployed to Render/Railway/Heroku or a VPS
-  - Set environment variables on the platform: `MONGODB_URI`, `PORT`, `CORS_ORIGIN`
-  - Update client base URL if the API is hosted on a different domain
-
-## Seed Data (Optional)
-```bash
-# generates demo users and accidents
+# Install server dependencies
 cd server
-npm run seed
+npm install
+
+# Install client dependencies
+cd ../client
+npm install
 ```
 
-## Contact
-For placement queries or demos, please reach out via email or LinkedIn.
+### 3. Environment Setup
 
-—
+Create a `.env` file in the `server` directory:
+```env
+MONGODB_URI=mongodb://localhost:27017/road-safety-guard
+JWT_SECRET=your_jwt_secret_key_here
+PORT=5000
+```
 
-This project is open‑source (MIT). Contributions and feedback are welcome.
+### 4. Start the application
+
+#### Development Mode (Recommended)
+```bash
+# From the root directory
+npm run dev
+```
+
+This will start both the server (port 5000) and client (port 3000) concurrently.
+
+#### Manual Start
+```bash
+# Start the server
+cd server
+npm run dev
+
+# Start the client (in a new terminal)
+cd client
+npm start
+```
+
+### 5. Access the application
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user
+- `PUT /api/auth/profile` - Update user profile
+
+### Accidents
+- `POST /api/accidents` - Create accident report
+- `GET /api/accidents` - Get all accidents (with filters)
+- `GET /api/accidents/recent` - Get recent accidents
+- `GET /api/accidents/:id` - Get single accident
+- `PUT /api/accidents/:id` - Update accident
+- `DELETE /api/accidents/:id` - Delete accident
+
+### Analytics
+- `GET /api/analytics/dashboard` - Dashboard analytics
+- `GET /api/analytics/trends` - Accident trends
+- `GET /api/analytics/heatmap` - Heatmap data
+
+## Database Schema
+
+### User Model
+```javascript
+{
+  username: String,
+  email: String,
+  password: String,
+  role: String, // user, admin, officer
+  profile: {
+    firstName: String,
+    lastName: String,
+    phone: String,
+    department: String
+  },
+  isActive: Boolean
+}
+```
+
+### Accident Model
+```javascript
+{
+  title: String,
+  location: String,
+  coordinates: { latitude: Number, longitude: Number },
+  dateTime: Date,
+  severity: String, // Low, Moderate, High, Critical
+  description: String,
+  category: String, // Overspeeding, Weather conditions, etc.
+  casualties: { fatalities: Number, injuries: Number },
+  vehicles: [{ type: String, damage: String }],
+  weather: { condition: String, visibility: Number },
+  reportedBy: ObjectId,
+  status: String, // Reported, Under Investigation, Resolved, Closed
+  emergencyServices: { police: Boolean, ambulance: Boolean, fire: Boolean }
+}
+```
+
+## Features in Detail
+
+### Dashboard
+- **Statistics Cards**: Total accidents, fatalities, injuries, high-risk locations
+- **Recent Accidents**: Latest accident reports with severity indicators
+- **High-Risk Locations**: Visual heatmap of accident-prone areas
+- **Trends Chart**: Monthly accident trends over time
+- **Category Analytics**: Pie chart showing accident categories
+- **Live Map**: Interactive map with accident locations
+
+### Accident Reporting
+- **Comprehensive Form**: Detailed accident information collection
+- **Severity Levels**: Low, Moderate, High, Critical classification
+- **Category Selection**: Overspeeding, Weather, Drunk driving, etc.
+- **Casualty Tracking**: Fatalities and injuries count
+- **Vehicle Information**: Multiple vehicles with damage assessment
+- **Weather Conditions**: Weather and visibility tracking
+- **Emergency Services**: Checkboxes for services called
+
+### Analytics
+- **Time-based Analysis**: Daily, weekly, monthly trends
+- **Category Breakdown**: Detailed category-wise statistics
+- **Severity Distribution**: Visual representation of severity levels
+- **Location Analysis**: High-risk area identification
+- **Casualty Statistics**: Fatalities and injuries tracking
+
+### Safety Resources
+- **Emergency Contacts**: Quick access to emergency numbers
+- **Safety Guidelines**: Comprehensive safety tips and rules
+- **Accident Response**: Step-by-step accident response guide
+- **Prevention Tips**: Proactive safety measures
+- **Quick Actions**: Emergency buttons and shortcuts
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support, email support@roadsafetyguard.com or create an issue in the repository.
+
+## Roadmap
+
+- [ ] Real-time notifications
+- [ ] Mobile app (React Native)
+- [ ] Advanced mapping integration
+- [ ] Machine learning for accident prediction
+- [ ] Integration with traffic management systems
+- [ ] Multi-language support
+- [ ] Advanced reporting features
+- [ ] API rate limiting and security enhancements

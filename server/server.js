@@ -1,78 +1,40 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-
-// Route imports
-import authRoutes from "./routes/auth.js";
-import accidentRoutes from "./routes/accidents.js";
-import analyticsRoutes from "./routes/analytics.js";
-import adminRoutes from "./routes/admin.js";
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
 // Load environment variables
 dotenv.config();
 
-
 const app = express();
 
-// Allowed origins for CORS
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(",").map(s => s.trim())
-  : [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://road-safety-guard-rcxx.vercel.app",
-    process.env.FRONTEND_URL
-  ].filter(Boolean);
-connectDB();
-
-// CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-    if (!allowedOrigins.includes(origin)) {
-      const msg = `CORS policy: Access denied from origin ${origin}`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Accept",
-    "Origin"
-  ],
-  optionsSuccessStatus: 200,
-  preflightContinue: false
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
-// Middleware to parse JSON
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/accidents", accidentRoutes);
-app.use("/api/analytics", analyticsRoutes);
-app.use("/api/admin", adminRoutes);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/accidents', require('./routes/accidents'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/admin', require('./routes/admin'));
 
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/road-safety-guard';
 
-// Basic test routes
-app.get("/", (req, res) => {
-  res.json({ message: "Road Safety Guard API is running!" });
-});
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected successfully'))
+.catch(err => console.error('MongoDB connection error:', err));
 
-app.get("/api", (req, res) => {
-  res.json({ message: "Road Safety Guard API is running!" });
+// Basic route
+app.get('/', (req, res) => {
+  res.json({ message: 'Road Safety Guard API is running!' });
 });
 
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

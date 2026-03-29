@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const accidentSchema = new mongoose.Schema({
   title: {
@@ -99,10 +99,9 @@ const accidentSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for location-based queries (non-GeoJSON structure: longitude/latitude)
-accidentSchema.index({ 'coordinates.longitude': 1, 'coordinates.latitude': 1 });
+// Index for location-based queries
+accidentSchema.index({ coordinates: '2dsphere' });
 accidentSchema.index({ dateTime: -1 });
 accidentSchema.index({ severity: 1 });
 
-const Accident = mongoose.model('Accident', accidentSchema);
-export default Accident;
+module.exports = mongoose.model('Accident', accidentSchema);

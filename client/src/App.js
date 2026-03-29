@@ -13,25 +13,6 @@ import SafetyResources from './components/resources/SafetyResources';
 import Settings from './components/settings/Settings';
 import LayoutNew from './components/layout/LayoutNew';
 import AdminPanel from './components/admin/AdminPanel';
-import axios from 'axios';
-import NotFound from './components/misc/NotFound';
-import LandingPage from './components/layout/LandingPage';
-
-
-// Configure Axios base URL with robust fallback. Force localhost API in local dev.
-const ENV_API_URL = process.env.REACT_APP_API_URL;
-const isLocalhost = typeof window !== 'undefined' && (
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-);
-axios.defaults.baseURL = isLocalhost
-  ? 'http://localhost:5000/api'
-  : (
-      ENV_API_URL ||
-      (typeof window !== 'undefined' && window.__API_URL__) ||
-      (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api')
-    );
-
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -181,15 +162,7 @@ function App() {
             />
 
             {/* Default redirect */}
-            <Route
-              path="/"
-              element={
-                <PublicRoute>
-                  <LandingPage />
-                </PublicRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
         </div>
       </Router>

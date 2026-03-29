@@ -10,13 +10,12 @@ const AdminPanel = () => {
   useEffect(() => {
     fetchAdminData();
   }, []);
-  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const API_URL = isLocalhost ? 'http://localhost:5000/api' : process.env.REACT_APP_API_URL;
+
   const fetchAdminData = async () => {
     try {
       const [dashboardResponse, pendingResponse] = await Promise.all([
-        axios.get(`${API_URL}/admin/dashboard`),
-        axios.get(`${API_URL}/admin/accidents/pending`)
+        axios.get('/api/admin/dashboard'),
+        axios.get('/api/admin/accidents/pending')
       ]);
       
       setDashboardData(dashboardResponse.data);
@@ -30,7 +29,7 @@ const AdminPanel = () => {
 
   const handleVerify = async (accidentId) => {
     try {
-      await axios.put(`${API_URL}/admin/accidents/${accidentId}/verify`);
+      await axios.put(`/api/admin/accidents/${accidentId}/verify`);
       fetchAdminData(); // Refresh data
     } catch (error) {
       console.error('Error verifying accident:', error);
@@ -39,15 +38,12 @@ const AdminPanel = () => {
 
   const handleReject = async (accidentId, reason) => {
     try {
-      await axios.put(`${API_URL}/admin/accidents/${accidentId}/reject`, { reason });
+      await axios.put(`/api/admin/accidents/${accidentId}/reject`, { reason });
       fetchAdminData(); // Refresh data
     } catch (error) {
       console.error('Error rejecting accident:', error);
     }
   };
-
-  // Helper for badge style
-  const badgeClass = (color) => `inline-flex items-center justify-center min-w-[72px] h-6 px-2 rounded-full text-xs font-semibold ${color} bg-opacity-90`;
 
   if (loading) {
     return (
@@ -155,12 +151,10 @@ const AdminPanel = () => {
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h3 className="font-medium text-white">{accident.title}</h3>
-                      <span className={badgeClass(
-                        accident.severity === 'High' ? 'bg-red-500 text-white' :
-                        accident.severity === 'Moderate' ? 'bg-yellow-500 text-white' :
-                        accident.severity === 'Critical' ? 'bg-red-700 text-white' :
-                        'bg-green-500 text-white')}
-                      >
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        accident.severity === 'High' ? 'bg-red-500' :
+                        accident.severity === 'Moderate' ? 'bg-yellow-500' : 'bg-green-500'
+                      } text-white`}>
                         {accident.severity}
                       </span>
                     </div>

@@ -6,11 +6,6 @@ const AccidentDetail = () => {
   const { id } = useParams();
   const [accident, setAccident] = useState(null);
   const [loading, setLoading] = useState(true);
-  const ENV_API_URL = process.env.REACT_APP_API_URL;
-  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const API_BASE_URL = isLocalhost ? 'http://localhost:5000/api' : (
-    ENV_API_URL || (typeof window !== 'undefined' && window.__API_URL__) || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api')
-  );
 
   useEffect(() => {
     fetchAccidentDetail();
@@ -18,7 +13,7 @@ const AccidentDetail = () => {
 
   const fetchAccidentDetail = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/accidents/${id}`);
+      const response = await axios.get(`/api/accidents/${id}`);
       setAccident(response.data);
     } catch (error) {
       console.error('Error fetching accident detail:', error);
@@ -41,9 +36,6 @@ const AccidentDetail = () => {
         return 'bg-gray-500';
     }
   };
-
-  // Helper for badge style
-  const badgeClass = (color) => `inline-flex items-center justify-center min-w-[72px] h-6 px-2 rounded-full text-xs font-semibold ${color} bg-opacity-90`;
 
   if (loading) {
     return (
@@ -76,21 +68,21 @@ const AccidentDetail = () => {
         </div>
         <div className="flex items-center space-x-2">
           {accident.isVerified ? (
-            <span className={badgeClass('bg-green-500 text-white')}>
+            <span className="bg-green-500 text-white text-sm px-3 py-1 rounded-full flex items-center">
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
               Verified
             </span>
           ) : (
-            <span className={badgeClass('bg-yellow-500 text-white')}>
+            <span className="bg-yellow-500 text-white text-sm px-3 py-1 rounded-full flex items-center">
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Pending Verification
             </span>
           )}
-          <span className={badgeClass(getSeverityColor(accident.severity))}>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getSeverityColor(accident.severity)} text-white`}>
             {accident.severity}
           </span>
         </div>
@@ -108,25 +100,25 @@ const AccidentDetail = () => {
                 <label className="text-sm font-medium text-dark-400">Description</label>
                 <p className="text-white mt-1">{accident.description}</p>
               </div>
-
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-dark-400">Location</label>
                   <p className="text-white mt-1">{accident.location}</p>
                 </div>
-
+                
                 <div>
                   <label className="text-sm font-medium text-dark-400">Date & Time</label>
                   <p className="text-white mt-1">
                     {new Date(accident.dateTime).toLocaleString()}
                   </p>
                 </div>
-
+                
                 <div>
                   <label className="text-sm font-medium text-dark-400">Category</label>
                   <p className="text-white mt-1">{accident.category}</p>
                 </div>
-
+                
                 <div>
                   <label className="text-sm font-medium text-dark-400">Status</label>
                   <p className="text-white mt-1">{accident.status}</p>
@@ -151,7 +143,7 @@ const AccidentDetail = () => {
                     </div>
                   </div>
                 </div>
-
+                
                 <div className="bg-yellow-900 border border-yellow-700 rounded-lg p-4">
                   <div className="flex items-center">
                     <svg className="w-6 h-6 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

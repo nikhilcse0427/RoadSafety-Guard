@@ -19,29 +19,10 @@ const ReportsAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('month');
-  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const API_URL = isLocalhost ? 'http://localhost:5000/api' : process.env.REACT_APP_API_URL;
-
-  const downloadCSV = (rows, filename) => {
-    if (!rows || rows.length === 0) return;
-    const headers = Object.keys(rows[0]);
-    const csv = [headers.join(',')]
-      .concat(rows.map(r => headers.map(h => JSON.stringify(r[h] ?? '')).join(',')))
-      .join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   const fetchAnalyticsData = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/analytics/dashboard?period=${timeRange}`);
+      const response = await axios.get(`/api/analytics/dashboard?period=${timeRange}`);
       setAnalyticsData(response.data);
     } catch (error) {
       console.error('Error fetching analytics data:', error);
@@ -150,8 +131,8 @@ const ReportsAnalytics = () => {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={analyticsData?.monthlyTrend || []}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis
-                  dataKey="_id.month"
+                <XAxis 
+                  dataKey="_id.month" 
                   stroke="#9ca3af"
                   tickFormatter={(value) => {
                     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -182,18 +163,7 @@ const ReportsAnalytics = () => {
 
         {/* Severity Distribution */}
         <div className="card">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white">Severity Distribution</h2>
-            <button
-              className="btn-secondary text-sm px-3 py-2"
-              onClick={() => {
-                const rows = (analyticsData?.severityStats || []).map(x => ({ severity: x._id, count: x.count }));
-                downloadCSV(rows, 'severity_distribution.csv');
-              }}
-            >
-              Export CSV
-            </button>
-          </div>
+          <h2 className="text-xl font-bold text-white mb-6">Severity Distribution</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -240,24 +210,13 @@ const ReportsAnalytics = () => {
 
       {/* Category Analysis */}
       <div className="card">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">Accident Categories</h2>
-          <button
-            className="btn-secondary text-sm px-3 py-2"
-            onClick={() => {
-              const rows = (analyticsData?.categoryStats || []).map(x => ({ category: x._id, count: x.count }));
-              downloadCSV(rows, 'accident_categories.csv');
-            }}
-          >
-            Export CSV
-          </button>
-        </div>
+        <h2 className="text-xl font-bold text-white mb-6">Accident Categories</h2>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={analyticsData?.categoryStats || []}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis
-                dataKey="_id"
+              <XAxis 
+                dataKey="_id" 
                 stroke="#9ca3af"
                 angle={-45}
                 textAnchor="end"
@@ -280,18 +239,7 @@ const ReportsAnalytics = () => {
 
       {/* High-Risk Locations */}
       <div className="card">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">High-Risk Locations</h2>
-          <button
-            className="btn-secondary text-sm px-3 py-2"
-            onClick={() => {
-              const rows = (analyticsData?.highRiskLocations || []).map(x => ({ location: x._id, count: x.count, avgSeverity: x.avgSeverity }));
-              downloadCSV(rows, 'high_risk_locations.csv');
-            }}
-          >
-            Export CSV
-          </button>
-        </div>
+        <h2 className="text-xl font-bold text-white mb-6">High-Risk Locations</h2>
         <div className="space-y-4">
           {analyticsData?.highRiskLocations?.slice(0, 10).map((location, index) => (
             <div key={index} className="flex items-center justify-between p-4 bg-dark-700 rounded-lg">

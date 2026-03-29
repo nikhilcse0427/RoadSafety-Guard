@@ -10,11 +10,6 @@ const RecentAccidents = () => {
     category: '',
     status: '',
   });
-  const ENV_API_URL = process.env.REACT_APP_API_URL;
-  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const API_BASE_URL = isLocalhost ? 'http://localhost:5000/api' : (
-    ENV_API_URL || (typeof window !== 'undefined' && window.__API_URL__) || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api')
-  );
 
   const fetchAccidents = useCallback(async () => {
     try {
@@ -23,14 +18,14 @@ const RecentAccidents = () => {
         if (value) params.append(key, value);
       });
 
-      const response = await axios.get(`${API_BASE_URL}/accidents?${params}`);
+      const response = await axios.get(`/api/accidents?${params}`);
       setAccidents(response.data.accidents);
     } catch (error) {
       console.error('Error fetching accidents:', error);
     } finally {
       setLoading(false);
     }
-  }, [filters, API_BASE_URL]);
+  }, [filters]);
 
   useEffect(() => {
     fetchAccidents();
@@ -65,9 +60,6 @@ const RecentAccidents = () => {
         return 'bg-gray-500';
     }
   };
-
-  // Helper for badge style
-  const badgeClass = (color) => `inline-flex items-center justify-center min-w-[72px] h-6 px-2 rounded-full text-xs font-semibold ${color} bg-opacity-90`;
 
   if (loading) {
     return (
@@ -168,30 +160,33 @@ const RecentAccidents = () => {
         ) : (
           accidents.map((accident) => (
             <div key={accident._id} className="card">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                <div className="flex flex-col sm:flex-row sm:items-start gap-4 flex-1">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2M8 7H6a2 2 0 00-2 2v6a2 2 0 002 2h2m8-8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2m-8-8V5a2 2 0 012-2h4a2 2 0 012 2v2" />
                     </svg>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                      <h3 className="text-lg font-semibold text-white truncate">{accident.title}</h3>
-                      <span className={badgeClass(getSeverityColor(accident.severity))}>
+
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h3 className="text-lg font-semibold text-white">{accident.title}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(accident.severity)} text-white`}>
                         {accident.severity}
                       </span>
-                      <span className={badgeClass(getStatusColor(accident.status))}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(accident.status)} text-white`}>
                         {accident.status}
                       </span>
                       {accident.isVerified ? (
-                        <span className={badgeClass('bg-green-500 text-white')}>✓ Verified</span>
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">✓ Verified</span>
                       ) : (
-                        <span className={badgeClass('bg-yellow-500 text-white')}>⏳ Pending</span>
+                        <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">⏳ Pending</span>
                       )}
                     </div>
-                    <p className="text-dark-300 mb-2 break-words">{accident.description}</p>
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-dark-400">
+
+                    <p className="text-dark-300 mb-2">{accident.description}</p>
+
+                    <div className="flex items-center space-x-6 text-sm text-dark-400">
                       <div className="flex items-center">
                         <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -199,12 +194,14 @@ const RecentAccidents = () => {
                         </svg>
                         {accident.location}
                       </div>
+
                       <div className="flex items-center">
                         <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         {new Date(accident.dateTime).toLocaleDateString()} at {new Date(accident.dateTime).toLocaleTimeString()}
                       </div>
+
                       <div className="flex items-center">
                         <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -212,11 +209,12 @@ const RecentAccidents = () => {
                         {accident.category}
                       </div>
                     </div>
+
                     {(accident.casualties.fatalities > 0 || accident.casualties.injuries > 0) && (
-                      <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
+                      <div className="mt-3 flex items-center space-x-4 text-sm">
                         {accident.casualties.fatalities > 0 && (
                           <span className="text-red-400 font-medium">
-                            {accident.casualties.fatalities} fatalit{accident.casualties.fatalities !== 1 ? 'ies' : 'y'}
+                            {accident.casualties.fatalities} fatality{accident.casualties.fatalities !== 1 ? 'ies' : ''}
                           </span>
                         )}
                         {accident.casualties.injuries > 0 && (
@@ -228,9 +226,10 @@ const RecentAccidents = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col items-start md:items-end text-sm text-dark-400 min-w-[120px] md:min-w-[160px]">
+
+                <div className="text-right text-sm text-dark-400">
                   <p>Reported by</p>
-                  <p className="font-medium text-white break-all">
+                  <p className="font-medium text-white">
                     {accident.reportedBy?.username || 'Unknown'}
                   </p>
                   <Link
