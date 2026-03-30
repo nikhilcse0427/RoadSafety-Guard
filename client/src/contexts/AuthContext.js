@@ -6,7 +6,8 @@ const AuthContext = createContext();
 
 // Set axios baseURL for production!
 // Use environment variable if available, otherwise fallback (placeholder for YOUR backend URL)
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || '';
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -56,11 +57,11 @@ export const AuthProvider = ({ children }) => {
       });
 
       const { token, user: userData } = response.data;
-      
+
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(userData);
-      
+
       toast.success('Login successful!');
       return { success: true };
     } catch (error) {
@@ -73,13 +74,13 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post('/api/auth/register', userData);
-      
+
       const { token, user: newUser } = response.data;
-      
+
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(newUser);
-      
+
       toast.success('Registration successful!');
       return { success: true };
     } catch (error) {
