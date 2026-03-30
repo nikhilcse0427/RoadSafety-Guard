@@ -4,6 +4,10 @@ import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
+// Set axios baseURL for production!
+// Use environment variable if available, otherwise fallback (placeholder for YOUR backend URL)
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
